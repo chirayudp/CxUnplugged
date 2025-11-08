@@ -1,2 +1,2 @@
-# Cpro_assg2
+# C x Unplugged
 A Music application in C
