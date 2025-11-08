@@ -5,6 +5,7 @@ typedef struct album {
     char name[50];
     struct album *next;
     struct album *prev;
+    struct album *nsong;
 } album;
 
 album* createalbum(char nam);

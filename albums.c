@@ -11,8 +11,9 @@ album* createalbum(char nam){
         printf("memory alloc failed");
         return NULL;
     }
-    strcpy(new->name,nam);
+    strcpy(new->name,&nam);
     new->next=NULL;
+    new->prev=NULL;
     return new;
 }
 

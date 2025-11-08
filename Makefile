@@ -1,23 +1,21 @@
-# Compiler to use
+# Compiler and flags
 CC = gcc
+cflags = -Wall -Wextra -std=c11
 
-# Compiler flags
-CFLAGS = -Wall -g
+# Object files
+objects = interface.o songs.o albums.o playlists.o
 
-# Target program name
-TARGET = cunplugged
+# Final executable name
+targ = cunplugged
+	
+# Default rule
+$(targ): $(objects)
+	$(CC) $(cflags) $(objects) -o $(targ)
 
-# Source files
-OBJS = main.o songs.o
-
-# Rule to build final program
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
-
-# Rule to compile .c -> .o
+# Generic rule for compiling .c into .o
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(cflags) -c $< -o $@
 
-# Clean up build files
+# Clean up
 clean:
-	rm -f $(TARGET) $(OBJS)
+	rm -f $(objects) $(targ)

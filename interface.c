@@ -6,6 +6,7 @@
 #include "playlists.h"
 
 int main() {
+    song* library=loadsongs();
     char task[100];
    
     printf("C-Unplugged!\n");
@@ -15,19 +16,18 @@ int main() {
         task[strcspn(task, "\n")] = 0;  
         char* cmd = strtok(task," ");
 
-        if (strcmp(cmd, "ca") == 0)
+// 0000000000000000000000000000000000000000000000000000000000000000000000000
+        if (strcmp(cmd, "ls") == 0){
+            listsongs();
+        } 
+// 0000000000000000000000000000000000000000000000000000000000000000000000000
+
+        else if (strcmp(cmd, "ca") == 0)
             printf("[Album will be created]\n");
 
         else if (strcmp(cmd, "oa") == 0){
             printf("opening Album \n");
-            char *name = strtok(NULL," ");
-                
-                FILE *f= fopen("list_of_songs.txt","r");
-                if (f==NULL){
-                    printf("Error\n");return 1;
-                }
-                fclose(f);
-
+            
         }
             
         else if (strcmp(cmd, "ss") == 0)

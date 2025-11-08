@@ -9,4 +9,5 @@ typedef struct song {
 } song;
 
 song* createsong(char title,char art);
+void listsongs();
 #endif
