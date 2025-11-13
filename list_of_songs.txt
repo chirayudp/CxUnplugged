@@ -1,4 +1,4 @@
-1.Shape of You : Ed Sheeran
-2.Blinding Lights : The Weeknd
-3.Heat Waves : Glass Animals
-4.Photograph : Ed Sheeran
+1.Shape of You,Ed Sheeran
+2.Blinding Lights,The Weeknd
+3.Heat Waves,Glass Animals
+4.Photograph,Ed Sheeran

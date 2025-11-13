@@ -8,6 +8,7 @@ typedef struct song {
     struct song *prev;
 } song;
 
-song* createsong(char title,char art);
+song* createsong(char* title,char* art);
 void listsongs();
+song* loadsongs();
 #endif

@@ -1,13 +1,13 @@
 #ifndef PLAYLISTS_H
 #define PLAYLISTS_H
-
+#include "songs.h"
 typedef struct playlist {
     char name[50];
     struct playlist *next;
     struct playlist *prev;
-    struct playlist *nsong;
+    song *sng;
 } playlist;
 
-playlist* createalbum(char nam);
-playlist* searchal(playlist* head,char name);
+playlist* createplaylist(char* nam);
+playlist* searchpl(playlist* head,char* name);
 #endif

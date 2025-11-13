@@ -1,28 +1,33 @@
-#include<stdio.h>
-#include<string.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "albums.h"
 
-album* createalbum(char nam){
+album *createalbum(char *nam)
+{
 
-    album* new=malloc(sizeof(album));
-    if ((new)==NULL)
+    album *new = malloc(sizeof(album));
+    if ((new) == NULL)
     {
         printf("memory alloc failed");
         return NULL;
     }
-    strcpy(new->name,&nam);
-    new->next=NULL;
-    new->prev=NULL;
+    strcpy(new->name,nam);
+    new->next = NULL;
+    new->prev = NULL;
     return new;
 }
 
-album* searchal(album* head,char name){
-    album* tmp = head;
-    while (tmp!=NULL)
+album *searchal(album *head, char *nam)
+{
+    album *tmp = head;
+    while (tmp != NULL)
     {
-        tmp=tmp->next;
+        if (tmp->name==nam)
+        {
+            break;
+        }
+        tmp = tmp->next;
     }
-    
+    return tmp ;
 }
-

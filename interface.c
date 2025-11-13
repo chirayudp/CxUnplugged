@@ -6,9 +6,8 @@
 #include "playlists.h"
 
 int main() {
-    song* library=loadsongs();
+    song* lib=loadsongs();
     char task[100];
-   
     printf("C-Unplugged!\n");
     while (1) {
         printf("~> ");
@@ -18,7 +17,7 @@ int main() {
 
 // 0000000000000000000000000000000000000000000000000000000000000000000000000
         if (strcmp(cmd, "ls") == 0){
-            listsongs();
+            listsongs(lib);
         } 
 // 0000000000000000000000000000000000000000000000000000000000000000000000000
 
