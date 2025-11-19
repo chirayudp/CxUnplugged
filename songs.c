@@ -96,6 +96,7 @@ void listsongs(song* head){
     }
     return ;
 } 
+
 void freetmp(song* head){
     song* tmp;
     while (head!=NULL)
@@ -157,7 +158,7 @@ song* searchsong(song* head, char* type, char* keyword)
 }
 
 song* getsong(song* head,int num){
-    int c=0;
+    int c=1;
     song* tmp= head;
     while (tmp!=NULL)
     {
