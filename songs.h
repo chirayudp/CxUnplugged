@@ -2,13 +2,19 @@
 #define SONGS_H
 
 typedef struct song {
-    char title[50];
+    int Id;
+    char title[100];
     char artist[50];
+    char genre[50];
     struct song *next;
     struct song *prev;
 } song;
 
-song* createsong(char* title,char* art);
-void listsongs();
+song* createsong(int id,char* title,char* art,char* genre);
+void listsongs(song* head);
 song* loadsongs();
+void freetmp(song* head);
+song* searchsong(song* head, char* type, char* keyword);
+song* getsong(song* head,int num);
+
 #endif
