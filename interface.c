@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "albums.h"
 #include "songs.h"
+#include "log.h"
 #include "playlists.h"
 void menu(){
     printf("---------------------------------\n");
@@ -23,7 +24,9 @@ void menu(){
 int main() {
     song* lib=loadsongs();
     song* currlist = lib;
+    song* currsong = NULL;
     album* albhead = loadalbums();  
+    playlist* plhead =loadplaylists();
     char task[100];
     int choice;
     printf("C-Unplugged!\n");
@@ -73,6 +76,12 @@ int main() {
 
                 if (num >0 ) {
                     song* picked = getsong(result, num);
+                    buildqueue(result, picked);
+                    printf("Now playing: %s - %s\n", picked->title, picked->artist);
+                    char b[100];
+                    sprintf(b, "played %d", picked->Id);
+                    logcmd(b);
+
                     if (picked == NULL) {
                         printf("Invalid song number.\n");
                     } else {
@@ -85,33 +94,52 @@ int main() {
             printf("\n");
             break;
         }
-        case 3:
+
+        case 3://listin  albums
             listalbums(albhead);
             printf("\n");
             break;
 
-        case 4:
-        printf("Enter album name\n~> ");
+        case 4://ops related to albums all inside openalbum
+            printf("Enter album name\n~> ");
             fgets(task, sizeof(task), stdin);
             task[strcspn(task,"\n")]=0;
             album* new =createalbum(task);
             insertalbum(&albhead,new);
             printf("\n");
             break;
+
         case 5:
-            // openalbum();
+            openalbum(albhead,lib);
             printf("\n");
             break;
         case 6:
-            // createplaylist();
+            printf("Enter playlist name\n~> ");
+            fgets(task, sizeof(task), stdin);
+            task[strcspn(task,"\n")]=0;
+            createplaylist(task);
             printf("\n");
             break;
-        case 7:
-            // openplaylist();
+        case 7: {
+            listplaylists(plhead);
+
+            printf("enter playlist no:\n~> ");
+            fgets(task, sizeof(task), stdin);
+            int pno = atoi(task);
+
+            playlist *pick = getplaylist(plhead, pno);
+
+            if (pick == NULL) {
+                printf("invalid playlist no\n");
+            } else {
+                openplaylist(pick, lib);
+            }
             printf("\n");
             break;
+            }
+
         case 8:
-            // showlog();
+            showlog();
             printf("\n");
             break;
         case 9:

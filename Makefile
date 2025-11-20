@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c11
 
 # Object files
-OBG = interface.o songs.o albums.o playlists.o
+OBG = interface.o songs.o albums.o playlists.o log.o
 
 # Final executable name
 TARG = cunplugged

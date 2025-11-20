@@ -2,6 +2,8 @@
 #include<string.h>
 #include<stdlib.h>
 #include "songs.h"
+song* playqueue = NULL;
+song* currsong = NULL;
 
 void lowercase(char* s){
     int i=0;
@@ -14,7 +16,7 @@ void lowercase(char* s){
     
 }
 
-song* createsong(int id,char* title,char* art,char* genre){
+song* createsong(int id,char* title,char* art,char* genre,char *dur){
 
     song* new=malloc(sizeof(song));
     if ((new)==NULL)
@@ -26,6 +28,7 @@ song* createsong(int id,char* title,char* art,char* genre){
     strcpy(new->title,title);
     strcpy(new->artist,art);
     strcpy(new->genre,genre);
+    strcpy(new->duration, dur);
     new->next=NULL; 
     new->prev=NULL;
 
@@ -59,17 +62,21 @@ song* loadsongs(){
         if (fgets(title, sizeof(title), f) == NULL) break;
         title[strcspn(title, "\n")] = 0;
 
-        char art[50];
+        char art[100];
         if (fgets(art, sizeof(art), f) == NULL) break;
         art[strcspn(art, "\n")] = 0;
 
-        char genre[50];
+        char genre[100];
         if (fgets(genre, sizeof(genre), f) == NULL) break;
         genre[strcspn(genre, "\n")] = 0;
 
+        char duration[10];
+        fgets(duration, sizeof(duration), f);
+        duration[strcspn(duration, "\n")] = 0; 
+
         fgets(line, sizeof(line), f);//Skip the blank line seperating songs
 
-        song *tmp = createsong(id,title,art,genre);
+        song *tmp = createsong(id,title,art,genre,duration);
         if (head == NULL) {
             head =tmp;
             pre=tmp;
@@ -122,7 +129,7 @@ song* searchsong(song* head, char* type, char* keyword)
 
     song *thead = NULL; 
     song *tail = NULL; 
-    char key[50];
+    char key[100];
     strcpy(key,keyword);
     lowercase(key);
 
@@ -137,7 +144,7 @@ song* searchsong(song* head, char* type, char* keyword)
         
         if (strstr(targ , key)!=NULL)
         {
-            song* node= createsong(tmp->Id,tmp->title,tmp->artist,tmp->genre);
+            song* node= createsong(tmp->Id,tmp->title,tmp->artist,tmp->genre,tmp->duration);
             if (thead==NULL)
             {
                 thead= node;
@@ -167,4 +174,76 @@ song* getsong(song* head,int num){
         tmp = tmp->next;
     }
     return NULL;
+}
+
+void buildqueue(song *list, song *picked)
+{
+    song *tmp = list;
+    song *h = NULL;
+    song *p = NULL;
+
+    while (tmp != NULL)
+    {
+        song *nn = createsong(tmp->Id, tmp->title, tmp->artist, tmp->genre, tmp->duration);
+
+        if (h == NULL) {
+            h = nn;
+            p = nn;
+        } 
+        else {
+            p->next = nn;
+            nn->prev = p;
+            p = nn;
+        }
+
+        if (tmp->Id == picked->Id)
+            currsong = nn;
+
+        tmp = tmp->next;
+    }
+
+    playqueue = h;
+}
+
+void playnext()
+{
+    if (currsong == NULL) {
+        printf("no music playing\n");
+        return;
+    }
+    song* tmp =currsong;
+    if (tmp->next == NULL) {     
+        while (tmp->prev != NULL)
+            tmp = tmp->prev;
+        currsong = tmp;
+    }
+    else {
+        tmp = tmp->next;
+        currsong = tmp;
+    }
+
+    currsong = currsong->next;
+    printf("now playing: %s - %s\n", currsong->title, currsong->artist);
+}
+
+void playprev()
+{
+    if (currsong == NULL) {
+        printf("no music playing\n");
+        return;
+    }
+
+    song* tmp =currsong;
+    if (tmp->next == NULL) {     
+        while (tmp->prev != NULL)
+            tmp = tmp->prev;
+        currsong = tmp;
+    }
+    else {
+        tmp = tmp->next;
+        currsong = tmp;
+    }
+
+    currsong = currsong->prev;
+    printf("now playing: %s - %s\n", currsong->title, currsong->artist);
 }
