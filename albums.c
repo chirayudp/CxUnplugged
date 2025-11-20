@@ -338,8 +338,9 @@ void openalbum(album *albhead, song *lib)
         printf("1. list songs\n");
         printf("2. add song\n");
         printf("3. delete song\n");
-        printf("4. search song inside album\n");
-        printf("5. exit album\n");
+        printf("4. play a song\n");         
+        printf("5. search song inside album\n");
+        printf("6. exit album\n");
         printf("--------------------------------\n");
         printf("~> ");
 
@@ -361,7 +362,38 @@ void openalbum(album *albhead, song *lib)
             break;
 
         case 4: {
-            printf("search syntax: <title/artist/genre> <keyword>\n~> ");
+            if (alb->sng == NULL) {
+                printf("album empty\n");
+                break;
+            }
+
+            listsongs(alb->sng);
+            printf("enter song number to play:\n~> ");
+            fgets(task, sizeof(task), stdin);
+            int n = atoi(task);
+
+            if (n <= 0) {
+                printf("invalid\n");
+                break;
+            }
+
+            song *picked = getsong(alb->sng, n);
+            if (picked == NULL) {
+                printf("invalid\n");
+                break;
+            }
+
+            buildqueue(alb->sng, picked);  
+            printf("now playing: %s - %s\n", picked->title, picked->artist);
+
+            char b[100];
+            sprintf(b, "played %d from album %d", picked->Id, alb->Id);
+            logcmd(b);
+            break;
+        }
+
+        case 5: {
+            printf("~> search syntax: <title/artist/genre> <keyword>\n~> ");
             fgets(task, sizeof(task), stdin);
             task[strcspn(task, "\n")] = 0;
 
@@ -369,20 +401,20 @@ void openalbum(album *albhead, song *lib)
             char *key  = strtok(NULL, " ");
 
             if (type == NULL || key == NULL) {
-                printf("invalid search syntax\n");
+                printf("~> invalid search syntax\n");
                 break;
             }
 
             song *res = searchsong(alb->sng, type, key);
 
             if (res == NULL) {
-                printf("no matching songs\n");
+                printf("~> no matching songs\n");
                 break;
             }
 
             listsongs(res);
 
-            printf("enter song number to play (0 = skip): ");
+            printf("~> enter song number to play (0 = skip): ");
             fgets(task, sizeof(task), stdin);
             int n = atoi(task);
 
@@ -394,14 +426,13 @@ void openalbum(album *albhead, song *lib)
             song *picked = getsong(res, n);
 
             if (picked == NULL) {
-                printf("invalid choice\n");
+                printf("~> invalid choice\n");
                 freetmp(res);
                 break;
             }
 
             buildqueue(alb->sng, picked);
-
-            printf("now playing: %s - %s\n", picked->title, picked->artist);
+            printf("~> now playing: %s - %s\n", picked->title, picked->artist);
 
             char b[100];
             sprintf(b, "played %d from album %d", picked->Id, alb->Id);
@@ -411,17 +442,17 @@ void openalbum(album *albhead, song *lib)
             break;
         }
 
-
-        case 5:
-            printf("leaving album: %s\n", alb->name);
+        case 6:
+            printf("~> leaving album: %s\n", alb->name);
             return;
 
         default:
-            printf("invalid choice\n");
+            printf("~> invalid choice\n");
             break;
         }
     }
 }
+
 
 
 

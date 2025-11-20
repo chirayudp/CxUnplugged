@@ -2,6 +2,8 @@
 #include<string.h>
 #include<stdlib.h>
 #include "songs.h"
+#include "log.h"
+
 song* playqueue = NULL;
 song* currsong = NULL;
 
@@ -222,6 +224,9 @@ void playnext()
 
     currsong = currsong->next;
     printf("~> now playing: %s - %s\n", currsong->title, currsong->artist);
+    char buf[128];
+    snprintf(buf, sizeof(buf), "played %d", currsong->Id);
+    logcmd(buf);
 }
 
 void playprev()
@@ -243,5 +248,44 @@ void playprev()
     }
 
     currsong = currsong->prev;
-    printf("~> now playing: %s - %s\n", currsong->title, currsong->artist);
+    printf("now playing: %s - %s\n", currsong->title, currsong->artist);
+    char buf[128];
+    snprintf(buf, sizeof(buf), "played %d", currsong->Id);
+    logcmd(buf);
+    return ;
+}
+void addsongtolibrary(void)
+{
+    FILE *f = fopen("library.txt","r");
+    int maxid = 0;
+    char line[512];
+    if (f) {
+        while (fgets(line, sizeof(line), f)) {
+            if (strcmp(line, "\n") == 0) continue;
+            int id = atoi(line);
+            if (id > maxid) maxid = id;
+            fgets(line, sizeof(line), f);
+            fgets(line, sizeof(line), f);
+            fgets(line, sizeof(line), f);
+            fgets(line, sizeof(line), f);
+        }
+        fclose(f);
+    }
+    int nid = maxid + 1;
+    char title[256], artist[256], genre[128], duration[32];
+    printf("enter title: "); fgets(title, sizeof(title), stdin); title[strcspn(title,"\n")] = 0;
+
+    printf("enter artist: "); fgets(artist, sizeof(artist), stdin); artist[strcspn(artist,"\n")] = 0;
+
+    printf("enter genre: "); fgets(genre, sizeof(genre), stdin); genre[strcspn(genre,"\n")] = 0;
+
+    printf("enter duration: "); fgets(duration, sizeof(duration), stdin); duration[strcspn(duration,"\n")] = 0;
+
+    FILE *fa = fopen("library.txt", "a");
+    if (!fa) { printf("error opening library\n"); return; }
+    fprintf(fa, "%d\n%s\n%s\n%s\n%s\n\n", nid, title, artist, genre, duration);
+    fclose(fa);
+
+    printf("song added with id %d\n", nid);
+    return ;
 }

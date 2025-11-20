@@ -20,6 +20,7 @@ void playprev();
 void playnext();
 song* searchsong(song* head, char* type, char* keyword);
 song* getsong(song* head,int num);
+void addsongtolibrary(void);
 extern song* playqueue;
 extern song* currsong;
 

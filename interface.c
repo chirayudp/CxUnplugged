@@ -5,7 +5,8 @@
 #include "songs.h"
 #include "log.h"
 #include "playlists.h"
-void menu(){
+
+void menu() {
     printf("---------------------------------\n");
     printf("~> MENU:\n");
     printf("1. List Songs\n");
@@ -18,146 +19,147 @@ void menu(){
     printf("8. Show Command Log\n");
     printf("9. Exit\n");
     printf("---------------------------------\n");
-    return ;
 }
-// -------------------------------------------------------------------------
+
 int main() {
-    song* lib=loadsongs();
-    song* currlist = lib;
-    song* currsong = NULL;
-    album* albhead = loadalbums();  
-    playlist* plhead =loadplaylists();
+
+    song *lib = loadsongs();
+    album *albhead = loadalbums();
+    playlist *plhead = loadplaylists();
+
     char task[100];
     int choice;
-    printf("C-Unplugged!\n");
-    while (1) {
-        printf("Enter the no. of ur choice\n");
 
-        menu(); //
-        
+    printf("C-Unplugged!\n");
+
+    while (1) {
+        printf("~> Enter the no. of your choice\n");
+        menu();
         printf("~> ");
         fgets(task, sizeof(task), stdin);
         choice = atoi(task);
-        if (choice < 1 || choice > 9)
-        {
-            printf("Please choose a valid no.");
+        if (choice < 1 || choice > 9) {
+            printf("~> Please choose a valid number\n");
             continue;
         }
-        switch (choice){
-        case 1://listing library
+
+        switch (choice) {
+        case 1:
             listsongs(lib);
             printf("\n");
             break;
-
-        case 2:{// search
-            printf("Search syntax: <title/artist/genre> <keyword>\n");
-            printf("~> ");
+    //-------------------------------------------------
+        case 2: {
+            printf("~> Search syntax: <title/artist/genre> <keyword>\n~> ");
             fgets(task, sizeof(task), stdin);
             task[strcspn(task, "\n")] = 0;
-            char* type = strtok(task, " ");      
-            char* key  = strtok(NULL, " ");   
-            if (type == NULL || key == NULL) {
-                printf("Search syntax: <title/artist/genre> <keyword>\n");
-                continue;
+
+            char *type = strtok(task, " ");
+            char *key = strtok(NULL, " ");
+
+            if (!type || !key) {
+                printf("~> invalid search syntax\n");
+                break;
             }
 
-            song * result= searchsong(lib,type,key);//to store search res
+            song *result = searchsong(lib, type, key);
 
-            if (result == NULL) {
-                printf("No matching songs found.\n");
-            } 
-            else {  
-                printf("Search Results:\n");
-                listsongs(result);  
+            if (!result) {
+                printf("~> no matching songs\n");
+                break;
+            }
 
-                printf("Enter song number (0 to skip): ");
-                fgets(task, sizeof(task), stdin);
-                int num = atoi(task);
+            listsongs(result);
 
-                if (num >0 ) {
-                    song* picked = getsong(result, num);
-                    buildqueue(result, picked);
-                    printf("Now playing: %s - %s\n", picked->title, picked->artist);
-                    char b[100];
-                    sprintf(b, "played %d", picked->Id);
-                    logcmd(b);
+            printf("~> Enter song number to play (0 = skip): ");
+            fgets(task, sizeof(task), stdin);
+            int n = atoi(task);
 
-                    if (picked == NULL) {
-                        printf("Invalid song number.\n");
-                    } else {
-                        printf("You selected: %s - %s\n", picked->title, picked->artist);
-                    }
+            if (n > 0) {
+                song *picked = getsong(result, n);
+
+                if (!picked) {
+                    printf("~> invalid song number\n");
+                    freetmp(result);
+                    break;
                 }
 
+                song *orig = lib;
+                while (orig && orig->Id != picked->Id)
+                    orig = orig->next;
+
+                buildqueue(lib, orig);
+
+                printf("~> Now playing: %s - %s\n",
+                       orig->title, orig->artist);
+
+                char b[100];
+                sprintf(b, "played %d", orig->Id);
+                logcmd(b);
             }
+
             freetmp(result);
             printf("\n");
             break;
         }
-
-        case 3://listin  albums
+    //-------------------------------------------------
+        case 3:
             listalbums(albhead);
             printf("\n");
             break;
-
-        case 4://ops related to albums all inside openalbum
-            printf("Enter album name\n~> ");
+    //-------------------------------------------------
+        case 4:
+            printf("~> Enter album name\n~> ");
             fgets(task, sizeof(task), stdin);
-            task[strcspn(task,"\n")]=0;
-            album* new =createalbum(task);
-            insertalbum(&albhead,new);
+            task[strcspn(task, "\n")] = 0;
+            insertalbum(&albhead, createalbum(task));
             printf("\n");
             break;
-
+    //-------------------------------------------------
         case 5:
-            openalbum(albhead,lib);
+            openalbum(albhead, lib);
             printf("\n");
             break;
+    //-------------------------------------------------
         case 6:
-            printf("Enter playlist name\n~> ");
+            printf("~> Enter playlist name\n~> ");
             fgets(task, sizeof(task), stdin);
-            task[strcspn(task,"\n")]=0;
+            task[strcspn(task, "\n")] = 0;
             createplaylist(task);
             printf("\n");
             break;
+    //-------------------------------------------------
         case 7: {
             listplaylists(plhead);
 
-            printf("enter playlist no:\n~> ");
+            printf("~> enter playlist no:\n~> ");
             fgets(task, sizeof(task), stdin);
             int pno = atoi(task);
 
             playlist *pick = getplaylist(plhead, pno);
 
-            if (pick == NULL) {
-                printf("invalid playlist no\n");
+            if (!pick) {
+                printf("~> invalid playlist no\n");
+                break;
             }
-            if (pick != NULL) {
-                playlist *full = loadplaylist(pick->Id, lib);
-                openplaylist(full, lib);
-                }
+
+            playlist *full = loadplaylist(pick->Id, lib);
+            openplaylist(full, lib);
 
             printf("\n");
             break;
-            }
-
+        }
+    //-------------------------------------------------
         case 8:
             showlog();
             printf("\n");
             break;
+    //------------------------------------------------
         case 9:
-            printf("Thank u for ur visit :)");
-            printf("\n");
+            printf("~> Thank you for your visit :)\n");
             return 0;
-
-        
-        default:
-            printf("\n");
-            break;
         }
-
     }
 
-    printf("Thank you for your visit :)\n");
     return 0;
 }

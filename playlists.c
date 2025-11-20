@@ -393,10 +393,33 @@ void listplaylists(playlist *head)
     }
 }
 
+void likesong(playlist *liked)
+{
+    if (currsong == NULL) { printf("~> no song playing\n"); return; }
+    if (liked == NULL) { printf("~> no liked playlist\n"); return; }
+
+    // check duplicates optional
+    song *t = liked->sng;
+    while (t != NULL) {
+        if (t->Id == currsong->Id) { printf("~> already liked\n"); return; }
+        t = t->next;
+    }
+
+    song *n = createsong(currsong->Id, currsong->title, currsong->artist, currsong->genre, currsong->duration);
+    if (liked->sng == NULL) liked->sng = n;
+    else {
+        song *x = liked->sng;
+        while (x->next) x = x->next;
+        x->next = n; n->prev = x;
+    }
+    saveplaylist(liked);
+    printf("~> liked\n");
+}
+
 void openplaylist(playlist *pl, song *lib)
 {
     if (pl == NULL) {
-        printf("invalid playlist\n");
+        printf("~> invalid playlist\n");
         return;
     }
 
@@ -404,45 +427,58 @@ void openplaylist(playlist *pl, song *lib)
     char buf[50];
 
     while (1) {
-        printf("\nplaylist: %s\n", pl->name);
+        printf("\n~> playlist: %s\n", pl->name);
         printf("1. list songs\n");
         printf("2. add song\n");
         printf("3. delete song\n");
-        printf("4. play next\n");
-        printf("5. play prev\n");
-        printf("6. exit playlist\n");
+        printf("4. play song\n");
+        printf("5. play next\n");
+        printf("6. play prev\n");
+        printf("7. exit playlist\n");
         printf("~> ");
 
         fgets(buf, sizeof(buf), stdin);
         choice = atoi(buf);
-
-        if (choice == 1) {
+        switch (choice)
+        {
+            case 1:
             listsongs(pl->sng);
-        }
-        else if (choice == 2) {
-            addsongplaylist(pl, lib);
-        }
-        else if (choice == 3) {
-            deletesongplaylist(pl);
-        }
-        else if (choice == 4) {
-            currsong = pl->currsong;  
-            playnext();
-            pl->currsong = currsong;  
-        }
-        else if (choice == 5) {
-            currsong = pl->currsong;  
-            playprev();
-            pl->currsong = currsong; 
-            
-        }
-        else if (choice == 6) {
             break;
+            case 2:
+                addsongplaylist(pl, lib);
+                break;
+            case 3:
+                deletesongplaylist(pl);
+                break;
+            case 4: { // play a song from this playlist
+                listsongs(pl->sng);
+                printf("~> enter song number to play (0 to cancel): ");
+                char buf[64]; fgets(buf, sizeof(buf), stdin);
+                int sno = atoi(buf);
+                if (sno <= 0) break;
+                song *pick = getsong(pl->sng, sno);
+                if (!pick) { printf("invalid\n"); break; }
+                buildqueue(pl->sng, pick);    
+                
+                printf("~> now playing: %s - %s\n", currsong->title, currsong->artist);
+                char logb[128]; snprintf(logb, sizeof(logb), "played %d from playlist %d", currsong->Id, pl->Id);
+                logcmd(logb);
+                break;
+            }
+            case 5:
+                playnext();   
+                break;
+            case 6:
+                playprev();
+                break;
+            case 7:
+                saveplaylist(pl);  
+                return;
+            default:
+                printf("~> invalid\n");
+
+            }
         }
-        else {
-            printf("invalid\n");
-        }
-    }
 }
 
 void saveplaylist(playlist *pl)

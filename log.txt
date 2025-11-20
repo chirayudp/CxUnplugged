@@ -1,3 +1,6 @@
 played 16
 played 11 from album 2
 played 4
+played 27
+played 27 from album 1
+played 22 from album 1
