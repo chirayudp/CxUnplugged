@@ -1,8 +1,5 @@
-Here is a **clean, simple, non-flashy, clear README** for your C-Unplugged music manager project.
 
----
-
-# **C-Unplugged – README**
+# **C-Unplugged**
 
 C-Unplugged is a **terminal-based music manager** written in C.
 It lets you:
@@ -10,15 +7,15 @@ It lets you:
 * Load a music library from a file
 * Play songs (with next/prev queue navigation)
 * Create albums and playlists
-* Add or remove songs inside albums/playlists
-* Search through songs
-* Maintain a command log
+* Add or remove songs from albums/playlists
+* Search through the songs
+* Maintains a command log
 
-Everything is stored in simple `.txt` files.
+Stored in simple `.txt` files.
 
 ---
 
-# **📁 Project Structure**
+# **Project Structure**
 
 ```
 cunplugged/
@@ -47,7 +44,7 @@ cunplugged/
 
 ---
 
-# **🔧 Building the Program**
+# **Building the Program**
 
 Make sure you have GCC installed.
 
@@ -71,7 +68,7 @@ make clean
 
 ---
 
-# **▶️ Running the Program**
+# **Running the Program**
 
 Run:
 
@@ -95,7 +92,7 @@ You will see the main menu:
 
 ---
 
-# **📚 How to Use Each Feature**
+# **Using Each Feature**
 
 ## **1. List Songs**
 
@@ -120,7 +117,7 @@ genre Pop
 ```
 
 After results, you can choose a song number to play.
-This builds a **temporary play queue** and sets the global `currsong`.
+This creates a **temporary play queue** and sets a global `currsong`.
 
 ---
 
@@ -132,7 +129,7 @@ Shows albums stored in `albums.txt`.
 
 ## **4. Create Album**
 
-Prompts for an album name, adds it to `albums.txt` and creates:
+Asks for an album name, adds it to `albums.txt` and creates:
 
 ```
 albums/a<ID>.txt
@@ -142,7 +139,7 @@ albums/a<ID>.txt
 
 ## **5. Open Album**
 
-Allows:
+Allows user to:
 
 * List songs inside album
 * Add a song from the library
@@ -164,7 +161,7 @@ playlists/p<ID>.txt
 
 ## **7. Open Playlist**
 
-Allows:
+Allows user to:
 
 * List playlist songs
 * Add song
@@ -173,7 +170,7 @@ Allows:
 * Play previous
 * Looping next/prev navigation
 
-NOTE: Songs in playlists are stored by ID in their respective file.
+#NOTE: Songs in playlists are stored by ID in their respective file.
 
 ---
 
@@ -193,7 +190,7 @@ cmdlog.txt
 
 ---
 
-# **🎵 Playing Music (Important)**
+# **Playing Music**
 
 Whenever you *play* a song (from search, album, or playlist):
 
@@ -205,11 +202,11 @@ Whenever you *play* a song (from search, album, or playlist):
 
 ---
 
-# **📄 Files Used**
+# **Files Used**
 
 ### **library.txt**
 
-Full master list of all songs.
+Master list of all songs.
 Format:
 
 ```
@@ -258,26 +255,11 @@ Appends every playback action.
 
 ---
 
-# **✔️ Requirements**
-
-* GCC compiler
-* Standard C libraries
-* `albums/` and `playlists/` folders must exist
-
----
-
-# **📝 Notes**
+# **# Note:**
 
 * Program uses **doubly linked lists** for playback navigation.
 * Adding or deleting songs modifies only the in-memory linked list; saving writes back.
 * Queue is always rebuilt whenever playing a song from library, album, or playlist.
-* No audio is played — this is a *simulated* music player.
+* No audio is played — *simulated* music player.
 
 ---
-
-If you want, I can also generate:
-
-✅ A version with Markdown formatting for GitHub
-✅ A compact README for assignment submission
-✅ A version with images / diagrams
-Just tell me.
