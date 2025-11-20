@@ -16,6 +16,8 @@ void buildqueue(song *list, song *picked);
 void listsongs(song* head);
 song* loadsongs();
 void freetmp(song* head);
+void playprev();
+void playnext();
 song* searchsong(song* head, char* type, char* keyword);
 song* getsong(song* head,int num);
 extern song* playqueue;

@@ -13,8 +13,8 @@ typedef struct playlist {
 playlist* createplaylist(char* nam);
 playlist* searchpl(playlist* head,char* name);
 playlist* getplaylist(playlist* head, int n);
-void playnext(song **currsong);
-void playprev(song **currsong);
+// void playnext(song **currsong);
+// void playprev(song **currsong);
 void addsongplaylist(playlist *pl, song *lib);
 void deletesongplaylist(playlist *pl);
 void openplaylist(playlist *pl, song *lib);

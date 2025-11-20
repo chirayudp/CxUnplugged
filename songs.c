@@ -11,9 +11,7 @@ void lowercase(char* s){
     {
         if (s[i]>='A' && s[i]<='Z')  s[i]+=32;
         i++;
-    }
-    
-    
+    } 
 }
 
 song* createsong(int id,char* title,char* art,char* genre,char *dur){
@@ -93,7 +91,7 @@ song* loadsongs(){
 }
 
 void listsongs(song* head){
-    printf("List of songs\n");
+    printf("~> List of songs\n");
     song* tmp = head;
     int c=1;
     while (tmp!=NULL)
@@ -120,7 +118,7 @@ song* searchsong(song* head, char* type, char* keyword)
 {
     if (!(strcmp(type, "title") == 0 || strcmp(type, "artist") == 0 || strcmp(type, "genre") == 0)) 
     {
-        printf("Invalid search type\n");
+        printf("~> Invalid search type\n");
         return NULL;
     }
     if (head == NULL || type == NULL || keyword == NULL) return NULL;
@@ -223,7 +221,7 @@ void playnext()
     }
 
     currsong = currsong->next;
-    printf("now playing: %s - %s\n", currsong->title, currsong->artist);
+    printf("~> now playing: %s - %s\n", currsong->title, currsong->artist);
 }
 
 void playprev()
@@ -245,5 +243,5 @@ void playprev()
     }
 
     currsong = currsong->prev;
-    printf("now playing: %s - %s\n", currsong->title, currsong->artist);
+    printf("~> now playing: %s - %s\n", currsong->title, currsong->artist);
 }

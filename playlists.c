@@ -426,10 +426,15 @@ void openplaylist(playlist *pl, song *lib)
             deletesongplaylist(pl);
         }
         else if (choice == 4) {
-            playnext(&pl->currsong);
+            currsong = pl->currsong;  
+            playnext();
+            pl->currsong = currsong;  
         }
         else if (choice == 5) {
-            playprev(&pl->currsong);
+            currsong = pl->currsong;  
+            playprev();
+            pl->currsong = currsong; 
+            
         }
         else if (choice == 6) {
             break;

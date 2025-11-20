@@ -131,9 +131,12 @@ int main() {
 
             if (pick == NULL) {
                 printf("invalid playlist no\n");
-            } else {
-                openplaylist(pick, lib);
             }
+            if (pick != NULL) {
+                playlist *full = loadplaylist(pick->Id, lib);
+                openplaylist(full, lib);
+                }
+
             printf("\n");
             break;
             }
