@@ -235,23 +235,22 @@ void playprev()
         return;
     }
 
-    song* tmp =currsong;
-    if (tmp->next == NULL) {     
-        while (tmp->next != NULL)
-            tmp = tmp->prev;
-        currsong = tmp;
+    if (currsong->prev != NULL) {
+        currsong = currsong->prev;
     }
     else {
-        tmp = tmp->prev;
-        currsong = tmp;
+        while (currsong->next != NULL)
+            currsong = currsong->next;
     }
 
-    printf("now playing: %s - %s\n", currsong->title, currsong->artist);
+    printf("~> now playing: %s - %s\n",
+           currsong->title, currsong->artist);
+
     char buf[128];
     snprintf(buf, sizeof(buf), "played %d", currsong->Id);
     logcmd(buf);
-    return ;
 }
+
 void addsongtolibrary(void)
 {
     FILE *f = fopen("library.txt","r");
