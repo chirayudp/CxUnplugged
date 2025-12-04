@@ -222,7 +222,6 @@ void playnext()
         currsong = tmp;
     }
 
-    currsong = currsong->next;
     printf("~> now playing: %s - %s\n", currsong->title, currsong->artist);
     char buf[128];
     snprintf(buf, sizeof(buf), "played %d", currsong->Id);
@@ -238,16 +237,15 @@ void playprev()
 
     song* tmp =currsong;
     if (tmp->next == NULL) {     
-        while (tmp->prev != NULL)
+        while (tmp->next != NULL)
             tmp = tmp->prev;
         currsong = tmp;
     }
     else {
-        tmp = tmp->next;
+        tmp = tmp->prev;
         currsong = tmp;
     }
 
-    currsong = currsong->prev;
     printf("now playing: %s - %s\n", currsong->title, currsong->artist);
     char buf[128];
     snprintf(buf, sizeof(buf), "played %d", currsong->Id);
